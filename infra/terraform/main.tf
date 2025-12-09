@@ -19,6 +19,7 @@ terraform {
     storage_account_name = "gh200terraform"
     container_name       = "prodstatefiles"
     key                  = "prod.terraform.tfstate"
+    use_oidc             = true
   }
 }
 
