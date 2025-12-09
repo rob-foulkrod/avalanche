@@ -123,6 +123,10 @@ The application uses an avalanche-inspired color scheme:
 - HTML/CSS
 - Bootstrap Icons
 
+## Build Badge
+
+[![CI Pipeline](https://github.com/rob-foulkrod/avalanche/actions/workflows/main.yml/badge.svg)](https://github.com/rob-foulkrod/avalanche/actions/workflows/main.yml)
+
 ## License
 
 See [LICENSE](LICENSE) file for details.
