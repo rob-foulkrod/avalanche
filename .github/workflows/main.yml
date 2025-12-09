@@ -9,6 +9,26 @@ on:
       - main
 
 
+  workflow_dispatch: #manual build trigger
+    inputs:
+      node_version:
+        description: 'Node.js version'
+        required: false
+        default: '20'
+        type: choice
+        options: ['18', '20', '22']
+      run_coverage:
+        description: 'Generate coverage report'
+        required: false
+        default: true
+        type: boolean
+      environment:
+        description: 'Target environment'
+        required: false
+        default: 'development'
+        type: string
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
