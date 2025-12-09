@@ -1,0 +1,94 @@
+@page "/comments"
+@rendermode InteractiveServer
+
+<PageTitle>Avalanche Comments</PageTitle>
+
+<div class="avalanche-container">
+    <div class="mountain-header">
+        <h1 class="avalanche-title">❄️ Avalanche Comments ❄️</h1>
+        <p class="subtitle">Share your thoughts on the mountain</p>
+    </div>
+
+    <div class="comment-form">
+        <h2>Leave a Comment</h2>
+        <EditForm Model="@newComment" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            
+            <div class="form-group">
+                <label for="name">Name</label>
+                <InputText id="name" class="form-control" @bind-Value="newComment.Name" placeholder="Your name" />
+                <ValidationMessage For="@(() => newComment.Name)" />
+            </div>
+
+            <div class="form-group">
+                <label for="comment">Comment</label>
+                <InputTextArea id="comment" class="form-control" @bind-Value="newComment.Text" placeholder="Share your thoughts..." rows="4" />
+                <ValidationMessage For="@(() => newComment.Text)" />
+            </div>
+
+            <button type="submit" class="btn-avalanche">Submit Comment</button>
+        </EditForm>
+    </div>
+
+    <div class="comments-section">
+        <h2>Recent Comments (@comments.Count)</h2>
+        
+        @if (comments.Count == 0)
+        {
+            <div class="no-comments">
+                <p>❄️ No comments yet. Be the first to share your thoughts! ❄️</p>
+            </div>
+        }
+        else
+        {
+            <div class="comments-list">
+                @foreach (var comment in comments.OrderByDescending(c => c.Timestamp))
+                {
+                    <div class="comment-card">
+                        <div class="comment-header">
+                            <span class="comment-author">🏔️ @comment.Name</span>
+                            <span class="comment-time">@comment.Timestamp.ToString("MMM dd, yyyy HH:mm")</span>
+                        </div>
+                        <div class="comment-body">
+                            @comment.Text
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private CommentModel newComment = new();
+    private List<CommentModel> comments = new();
+
+    private void HandleValidSubmit()
+    {
+        var comment = new CommentModel
+        {
+            Name = newComment.Name,
+            Text = newComment.Text,
+            Timestamp = DateTime.Now
+        };
+        
+        comments.Add(comment);
+        
+        // Reset form
+        newComment = new CommentModel();
+        StateHasChanged();
+    }
+
+    public class CommentModel
+    {
+        [Required(ErrorMessage = "Name is required")]
+        [StringLength(50, ErrorMessage = "Name must be less than 50 characters")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Comment is required")]
+        [StringLength(500, ErrorMessage = "Comment must be less than 500 characters")]
+        public string Text { get; set; } = string.Empty;
+
+        public DateTime Timestamp { get; set; }
+    }
+}
