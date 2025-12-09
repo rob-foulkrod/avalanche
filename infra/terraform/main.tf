@@ -13,6 +13,13 @@ terraform {
       version = "~> 3.0"
     }
   }
+
+  backend "azurerm" {
+    resource_group_name  = "gh-200"
+    storage_account_name = "gh200terraform"
+    container_name       = "prodstatefiles"
+    key                  = "prod.terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
