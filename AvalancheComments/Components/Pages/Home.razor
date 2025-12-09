@@ -1,0 +1,83 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<div class="avalanche-home">
+    <h1>❄️ Welcome to Avalanche Comments! ❄️</h1>
+    
+    <div class="home-content">
+        <p>Experience the cool, refreshing interface inspired by mountain avalanches and winter themes.</p>
+        
+        <div class="feature-card">
+            <h2>🏔️ Share Your Thoughts</h2>
+            <p>Visit our comments page to share your thoughts and see what others are saying.</p>
+            <a href="/comments" class="home-btn">Go to Comments →</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avalanche-home {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        text-align: center;
+    }
+    
+    .avalanche-home h1 {
+        font-size: 2.5rem;
+        color: #01579b;
+        margin-bottom: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(2, 136, 209, 0.2);
+    }
+    
+    .home-content {
+        margin-top: 2rem;
+    }
+    
+    .home-content > p {
+        font-size: 1.2rem;
+        color: #0277bd;
+        margin-bottom: 2rem;
+    }
+    
+    .feature-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-top: 4px solid #0288d1;
+        margin-top: 2rem;
+    }
+    
+    .feature-card h2 {
+        color: #01579b;
+        margin-bottom: 1rem;
+        font-size: 1.8rem;
+    }
+    
+    .feature-card p {
+        color: #263238;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .home-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #0288d1 0%, #01579b 100%);
+        color: white;
+        text-decoration: none;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: transform 0.2s, box-shadow 0.3s;
+        box-shadow: 0 4px 15px rgba(2, 136, 209, 0.4);
+    }
+    
+    .home-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(2, 136, 209, 0.5);
+        color: white;
+    }
+</style>
