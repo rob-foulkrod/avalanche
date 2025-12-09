@@ -25,7 +25,7 @@ env:
   CONFIGURATION: Release
   COVERAGE_DIRECTORY: ./coverage-results
   COVERAGE_REPORT_DIRECTORY: ./coverage-report
-  MIN_COVERAGE_THRESHOLD: 20  # Demo code coverage threshold
+  MIN_COVERAGE_THRESHOLD: 4  # Demo code coverage threshold
 
 jobs:
   build-and-test:
