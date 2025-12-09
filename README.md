@@ -39,12 +39,63 @@ cd AvalancheComments
 dotnet build
 ```
 
+Or build the entire solution:
+
+```bash
+dotnet build Avalanche.sln
+```
+
+## Testing
+
+### Running Tests
+
+To run all tests:
+
+```bash
+dotnet test
+```
+
+Or with verbose output:
+
+```bash
+dotnet test --verbosity normal
+```
+
+### Code Coverage
+
+To run tests with code coverage collection:
+
+```bash
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+This will generate a Cobertura XML coverage report in the `TestResults` directory. The coverage file can be found at:
+
+```
+AvalancheComments.Tests/TestResults/{guid}/coverage.cobertura.xml
+```
+
+You can use tools like [ReportGenerator](https://github.com/danielpalme/ReportGenerator) to convert the coverage report to HTML:
+
+```bash
+# Install ReportGenerator
+dotnet tool install -g dotnet-reportgenerator-globaltool
+
+# Generate HTML report
+reportgenerator -reports:"AvalancheComments.Tests/TestResults/*/coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html
+```
+
 ## Project Structure
 
-- `Components/Pages/Comments.razor` - Main comments page with form and display
-- `Components/Pages/Home.razor` - Welcome page
-- `wwwroot/app.css` - Custom CSS with avalanche theme styling
-- `Components/Layout/` - Layout components including navigation
+- `Avalanche.sln` - Solution file containing all projects
+- `AvalancheComments/` - Main web application
+  - `Components/Pages/Comments.razor` - Main comments page with form and display
+  - `Components/Pages/Home.razor` - Welcome page
+  - `Components/Layout/` - Layout components including navigation
+  - `Models/CommentModel.cs` - Data model for comments
+  - `wwwroot/app.css` - Custom CSS with avalanche theme styling
+- `AvalancheComments.Tests/` - xUnit test project
+  - `CommentModelTests.cs` - Unit tests for CommentModel validation
 
 ## Design Theme
 
