@@ -19,6 +19,12 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      use_terraform:
+        description: 'Use Terraform instead of Bicep for infrastructure deployment'
+        required: false
+        type: boolean
+        default: false
 
 env:
   DOTNET_VERSION: '8.0.x'
@@ -232,6 +238,20 @@ jobs:
         done
         echo "All Bicep files passed linting successfully!"
 
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3.1.2
+      with:
+        terraform_wrapper: false
+
+    - name: Lint Terraform files
+      working-directory: ./infra/terraform
+      run: |
+        echo "Linting Terraform files..."
+        terraform init -backend=false
+        terraform validate
+        terraform fmt -check -recursive
+        echo "✅ All Terraform files passed linting!"
+
     - name: Upload infrastructure artifact
       uses: actions/upload-artifact@v4
       with:
@@ -262,7 +282,7 @@ jobs:
     name: Deploy to Azure WebApp
     needs: [build-and-test, package-infra, security-scan]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/release')
+    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/release')) || (github.event_name == 'workflow_dispatch')
     environment:
       name: production
       url: ${{ steps.deploy-infra.outputs.webAppUrl }}
@@ -290,12 +310,43 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Run infra deployment script
-      id: deploy-infra
+    - name: Setup Terraform
+      if: github.event_name == 'workflow_dispatch' && inputs.use_terraform == true
+      uses: hashicorp/setup-terraform@v3.1.2
+      with:
+        terraform_wrapper: false
+
+    - name: Run Terraform deployment
+      if: github.event_name == 'workflow_dispatch' && inputs.use_terraform == true
+      id: deploy-infra-terraform
+      working-directory: ./infra/terraform
+      env:
+        ARM_USE_OIDC: true
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      run: |
+        chmod +x infra-terraform.sh
+        ./infra-terraform.sh
+
+    - name: Run Bicep deployment
+      if: github.event_name != 'workflow_dispatch' || inputs.use_terraform != true
+      id: deploy-infra-bicep
       working-directory: ./infra
       run: |
         chmod +x infra.sh
         ./infra.sh
+
+    - name: Set deployment outputs
+      id: deploy-infra
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ inputs.use_terraform }}" == "true" ]; then
+          echo "webAppName=${{ steps.deploy-infra-terraform.outputs.webAppName }}" >> "$GITHUB_OUTPUT"
+          echo "webAppUrl=${{ steps.deploy-infra-terraform.outputs.webAppUrl }}" >> "$GITHUB_OUTPUT"
+        else
+          echo "webAppName=${{ steps.deploy-infra-bicep.outputs.webAppName }}" >> "$GITHUB_OUTPUT"
+          echo "webAppUrl=${{ steps.deploy-infra-bicep.outputs.webAppUrl }}" >> "$GITHUB_OUTPUT"
+        fi
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
