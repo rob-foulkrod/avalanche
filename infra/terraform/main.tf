@@ -140,9 +140,8 @@ resource "azurerm_monitor_diagnostic_setting" "app_service_plan" {
   target_resource_id         = azurerm_service_plan.main.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
 
-  metric {
+  enabled_log {
     category = "AllMetrics"
-    enabled  = true
   }
 }
 
@@ -191,8 +190,7 @@ resource "azurerm_monitor_diagnostic_setting" "web_app" {
     category = "AppServiceAppLogs"
   }
 
-  metric {
+  enabled_log {
     category = "AllMetrics"
-    enabled  = true
   }
 }
