@@ -16,6 +16,9 @@ permissions:
 
 network: defaults
 
+env:
+  COPILOT_EXP_COPILOT_CLI_MCP_ALLOWLIST: "false"
+
 tools:
   github:
     # If in a public repo, setting `lockdown: false` allows
