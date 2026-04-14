@@ -57,7 +57,7 @@ public class CommentFilterServiceTests
 
         // Assert
         Assert.Equal(3, result.Count);
-        Assert.All(result, c => Assert.True(c.Timestamp <= toDate.Date.AddDays(1).AddTicks(-1)));
+        Assert.All(result, c => Assert.True(c.Timestamp < toDate.Date.AddDays(1)));
     }
 
     [Fact]

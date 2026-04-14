@@ -26,8 +26,8 @@ public static class CommentFilterService
 
         if (toDate.HasValue)
         {
-            var to = toDate.Value.Date.AddDays(1).AddTicks(-1);
-            filtered = filtered.Where(c => c.Timestamp <= to);
+            var to = toDate.Value.Date.AddDays(1);
+            filtered = filtered.Where(c => c.Timestamp < to);
         }
 
         return filtered.ToList();
