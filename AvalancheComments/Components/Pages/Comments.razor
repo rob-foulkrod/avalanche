@@ -1,6 +1,7 @@
 @page "/comments"
 @rendermode InteractiveServer
 @using AvalancheComments.Models
+@using AvalancheComments.Services
 
 <PageTitle>Avalanche Comments</PageTitle>
 
@@ -32,9 +33,21 @@
     </div>
 
     <div class="comments-section">
-        <h2>Recent Comments (@comments.Count)</h2>
-        
-        @if (comments.Count == 0)
+        <h2>Recent Comments (@filteredComments.Count)</h2>
+
+        <div class="comment-filter">
+            <div class="filter-group">
+                <label for="filterFrom">From</label>
+                <input id="filterFrom" type="date" class="form-control" @bind="filterFromDate" @bind:event="onchange" />
+            </div>
+            <div class="filter-group">
+                <label for="filterTo">To</label>
+                <input id="filterTo" type="date" class="form-control" @bind="filterToDate" @bind:event="onchange" />
+            </div>
+            <button class="btn-clear-filter" @onclick="ClearFilter">Clear Filter</button>
+        </div>
+
+        @if (filteredComments.Count == 0)
         {
             <div class="no-comments">
                 <p>❄️ No comments yet. Be the first to share your thoughts! ❄️</p>
@@ -43,7 +56,7 @@
         else
         {
             <div class="comments-list">
-                @foreach (var comment in comments.OrderByDescending(c => c.Timestamp))
+                @foreach (var comment in filteredComments.OrderByDescending(c => c.Timestamp))
                 {
                     <div class="comment-card">
                         <div class="comment-header">
@@ -63,6 +76,11 @@
 @code {
     private CommentModel newComment = new();
     private List<CommentModel> comments = new();
+    private DateTime? filterFromDate;
+    private DateTime? filterToDate;
+
+    private List<CommentModel> filteredComments =>
+        CommentFilterService.FilterByDate(comments, filterFromDate, filterToDate);
 
     private void HandleValidSubmit()
     {
@@ -78,5 +96,11 @@
         // Reset form
         newComment = new CommentModel();
         StateHasChanged();
+    }
+
+    private void ClearFilter()
+    {
+        filterFromDate = null;
+        filterToDate = null;
     }
 }

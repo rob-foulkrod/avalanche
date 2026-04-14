@@ -236,6 +236,66 @@ h1:focus {
     margin-top: 0.25rem;
 }
 
+/* Comment Filter Styles */
+.comment-filter {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 150px;
+}
+
+.filter-group label {
+    margin-bottom: 0.5rem;
+    color: #01579b;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.filter-group input[type="date"] {
+    padding: 0.5rem 0.75rem;
+    border: 2px solid #b3e5fc;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.filter-group input[type="date"]:focus {
+    outline: none;
+    border-color: #0288d1;
+    box-shadow: 0 0 0 3px rgba(2, 136, 209, 0.1);
+}
+
+.btn-clear-filter {
+    background: transparent;
+    color: #0288d1;
+    border: 2px solid #0288d1;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+    align-self: flex-end;
+}
+
+.btn-clear-filter:hover {
+    background: #0288d1;
+    color: white;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .avalanche-container {
